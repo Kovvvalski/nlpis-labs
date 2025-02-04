@@ -1,0 +1,49 @@
+# Файлы и папки, создаваемые PyCharm
+.idea/
+*.iml
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+ENV/
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Логи и отладочная информация
+*.log
+*.out
+*.err
+
+# Конфигурационные файлы и зависимости
+*.env
+*.ini
+*.cfg
+*.toml
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# База данных и временные файлы
+db.sqlite3
+*.db
+*.sqlite
+
+# Кэш и файлы Jupyter Notebook
+.ipynb_checkpoints
+
+# Файлы сборки и артефакты
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# Docker и контейнерные файлы
+Dockerfile
+*.dockerignore
+
+# Разное
+.vscode/
