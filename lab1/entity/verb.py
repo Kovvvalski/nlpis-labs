@@ -29,8 +29,8 @@ class Verb(Word):
         return self.base + 'ing'  # Default case: just add "ing"
 
     def _generate_past_participle(self):
-        if self.base.endswith('e'):  # Case 1: If ends with "e", remove "e" and add "d"
-            return self.base[:-1] + 'd'
+        if self.base.endswith('e'):  # Case 1: If ends with "e" add "d"
+            return self.base + 'd'
         if len(self.base) > 2 and self.base[-1] not in VOWELS and self.base[-2] in VOWELS and self.base[-3] not in VOWELS:  # Case 2: Double the final consonant before adding "ed"
             return self.base + self.base[-1] + 'ed'
         return self.base + 'ed'  # Default case: just add "ed"
