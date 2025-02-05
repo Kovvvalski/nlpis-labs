@@ -1,5 +1,5 @@
 import inflect
-from .word import Word
+from lab1.entity.word import Word
 
 class Noun(Word):
     def __init__(self, base):

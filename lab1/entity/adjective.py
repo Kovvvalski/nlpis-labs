@@ -1,4 +1,4 @@
-from .word import Word
+from lab1.entity.word import Word
 
 
 class Adjective(Word):
