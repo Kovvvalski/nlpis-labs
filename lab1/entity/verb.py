@@ -1,6 +1,6 @@
 from .word import Word
 
-VOWELS = 'aeiouy'  # Определение гласных
+VOWELS = 'aeiouy'
 
 class Verb(Word):
     def generate_word_form(self, word_form_params):

@@ -34,6 +34,6 @@ def analyze_word(word):
 
 
 # Пример использования
-word = "going"
+word = "very"
 result = analyze_word(word)
 print(result)
