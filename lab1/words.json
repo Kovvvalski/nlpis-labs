@@ -1,0 +1,72 @@
+[
+  {
+    "base": "play",
+    "speech_part": "VB",
+    "irregular": false
+  },
+  {
+    "base": "walk",
+    "speech_part": "VB",
+    "irregular": false
+  },
+  {
+    "base": "talk",
+    "speech_part": "VB",
+    "irregular": false
+  },
+  {
+    "base": "go",
+    "speech_part": "VB",
+    "irregular": true,
+    "forms": {
+      "past": "went",
+      "participle": "gone"
+    }
+  },
+  {
+    "base": "eat",
+    "speech_part": "VB",
+    "irregular": true,
+    "forms": {
+      "past": "ate",
+      "participle": "eaten"
+    }
+  },
+  {
+    "base": "run",
+    "speech_part": "VB",
+    "irregular": true,
+    "forms": {
+      "past": "ran",
+      "participle": "run"
+    }
+  },
+  {
+    "base": "dog",
+    "speech_part": "NN",
+    "forms": {
+      "nominative": {
+        "singular": "",
+        "plural": "s"
+      },
+      "genitive": {
+        "singular": "'s",
+        "plural": "s'"
+      }
+    }
+  },
+  {
+    "base": "child",
+    "speech_part": "NN",
+    "forms": {
+      "nominative": {
+        "singular": "",
+        "plural": "ren"
+      },
+      "genitive": {
+        "singular": "'s",
+        "plural": "ren's"
+      }
+    }
+  }
+]
