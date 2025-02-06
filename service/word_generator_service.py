@@ -6,7 +6,7 @@ from entity.verb import Verb
 
 BASES_EXCEPTIONS = [
     'be', 'begin', 'eat', 'go', 'have', 'know', 'run', 'see', 'take', 'speak', 'write',
-    'come', 'get', 'give', 'meet', 'bring',
+    'come', 'get', 'give', 'meet', 'bring', 'become',
     'child', 'man', 'woman', 'tooth', 'foot', 'mouse', 'goose', 'cactus', 'fungus', 'alumnus',
     'bacterium', 'criterion', 'phenomenon', 'ox', 'datum',
     'good', 'bad', 'far', 'little', 'much', 'many', 'old', 'young', 'big', 'small', 'early',

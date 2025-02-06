@@ -5,7 +5,6 @@ document.getElementById("loadFileBtn").addEventListener("click", loadFromJSON);
 document.getElementById("addWordBtn").addEventListener("click", addNewWord);
 
 let allWords = [];
-let filteredWords = [];  // Store the filtered words for display
 
 function handleFileSelect(event) {
     const file = event.target.files[0];
@@ -18,187 +17,97 @@ function handleFileSelect(event) {
 
 function readFile(file) {
     const reader = new FileReader();
-
     reader.onload = function (e) {
-        const text = e.target.result;
-        const fileFormat = file.name.endsWith(".txt") ? "txt" : "rtf"; // Determine format
-        extractTextAndSend(text, fileFormat);
+        extractTextAndSend(e.target.result, file.name.endsWith(".txt") ? "txt" : "rtf");
     };
-
-    if (file.name.endsWith(".txt")) {
-        reader.readAsText(file);
-    } else if (file.name.endsWith(".rtf")) {
-        reader.readAsText(file);
-    }
+    reader.readAsText(file);
 }
 
 function extractTextAndSend(text, format) {
-    // Send the text to the API after extracting
     document.getElementById("sendDataBtn").disabled = false;
-
-    // Prepare request data with format flag
-    const requestData = {
-        text: text,
-        format: format // Include format (txt/rtf)
-    };
-
     fetch("/api/process-text", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, format })
     })
-        .then(response => response.json())
-        .then(data => {
-            allWords = data;
-            filteredWords = [...allWords];  // Initialize filtered words with the full list
-            populateTable();
-            document.getElementById("saveFileBtn").disabled = false;
-            document.getElementById("loadFileBtn").disabled = false;
-        })
-        .catch(error => {
-            console.error("Error:", error);
-        });
+    .then(response => response.json())
+    .then(data => {
+        allWords = data;
+        populateTable();
+        document.getElementById("saveFileBtn").disabled = false;
+        document.getElementById("loadFileBtn").disabled = false;
+    })
+    .catch(error => console.error("Error:", error));
 }
 
 function populateTable() {
     const tableBody = document.querySelector("#wordTable tbody");
-    tableBody.innerHTML = ""; // Clear existing rows
-
-    // Сортируем слова по алфавиту по свойству "base"
-    filteredWords.sort((a, b) => {
-        const baseA = a.base.toLowerCase();
-        const baseB = b.base.toLowerCase();
-
-        if (baseA < baseB) {
-            return -1;
-        }
-        if (baseA > baseB) {
-            return 1;
-        }
-        return 0; // если слова одинаковые
-    });
-
-    filteredWords.forEach((word, index) => {
+    tableBody.innerHTML = "";
+    allWords.sort((a, b) => a.base.localeCompare(b.base));
+    allWords.forEach((word, index) => {
         const row = document.createElement("tr");
+        if (word.is_exception) row.classList.add("exception");
 
-        // Если это исключение, добавляем класс для красной подсветки
-        if (word.is_exception) {
-            row.classList.add("exception");
-        }
+        row.innerHTML = `
+            <td><span onclick="editBaseWord(${index})">${word.base}</span></td>
+            <td></td>
+            <td></td>
+            <td><button onclick="deleteWord(${index})">Delete</button></td>
+            <td>${word.is_exception ? `<button onclick="removeException(${index})">Remove Exception</button>` : ""}</td>
+        `;
 
-        // Word Cell with editable base
-        const wordCell = document.createElement("td");
-        wordCell.innerHTML = `<span onclick="editBaseWord(${index})">${word.base}</span>`;
-
-        // Part of Speech Cell with Dropdown
-        const posCell = document.createElement("td");
-        const posSelector = createPosSelector(word.part_of_speech, index);
-        posCell.appendChild(posSelector);
-
-        // Forms Cell
-        const formsCell = document.createElement("td");
-        formsCell.appendChild(createFormsEditor(word.forms, index));
-
-        // Add Delete button
-        const deleteCell = document.createElement("td");
-        const deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.onclick = () => deleteWord(index);
-        deleteCell.appendChild(deleteButton);
-
-        // Add Remove Exception button if the word is an exception
-        const exceptionCell = document.createElement("td");
-        if (word.is_exception) {
-            const removeExceptionButton = document.createElement("button");
-            removeExceptionButton.textContent = "Remove Exception";
-            removeExceptionButton.onclick = () => removeException(index);
-            exceptionCell.appendChild(removeExceptionButton);
-        }
-
-        row.appendChild(wordCell);
-        row.appendChild(posCell);
-        row.appendChild(formsCell);
-        row.appendChild(deleteCell);
-        row.appendChild(exceptionCell);
-
+        row.children[1].appendChild(createPosSelector(word.part_of_speech, index));
+        row.children[2].appendChild(createFormsEditor(word.forms, index));
         tableBody.appendChild(row);
     });
 }
 
 function removeException(index) {
-    allWords[index].is_exception = false;  // Убираем исключение
-    filteredWords = [...allWords]; // Обновляем список фильтрации
-    populateTable(); // Пересоздаем таблицу
+    allWords[index].is_exception = false;
+    populateTable();
 }
 
 function markAsException(index) {
     allWords[index].is_exception = true;
-    filteredWords = [...allWords];  // Обновляем список фильтрации
-    populateTable();  // Пересоздаем таблицу
+    populateTable();
 }
 
 function createPosSelector(selectedValue, index) {
-    const posOptions = ["Noun", "Verb", "Adjective", "Pronoun", "Preposition", "Conjunction", "Interjection", "Determiner", "Particle"];
     const select = document.createElement("select");
-
-    posOptions.forEach((pos) => {
-        const option = document.createElement("option");
-        option.value = pos;
-        option.textContent = pos;
-        if (pos === selectedValue) {
-            option.selected = true;
-        }
+    ["Noun", "Verb", "Adjective", "Pronoun", "Preposition", "Conjunction", "Interjection", "Determiner", "Particle"].forEach(pos => {
+        const option = new Option(pos, pos, pos === selectedValue, pos === selectedValue);
         select.appendChild(option);
     });
-
-    select.addEventListener("change", function () {
-        updateWord(index, 'part_of_speech', select.value);
-    });
-
+    select.addEventListener("change", () => updateWord(index, 'part_of_speech', select.value));
     return select;
 }
 
 function createFormsEditor(forms, index) {
     const div = document.createElement("div");
-
-    // Loop through the forms and create input fields for each key-value pair
-    Object.keys(forms).forEach((key) => {
-        const formPairDiv = document.createElement("div");
-        formPairDiv.innerHTML = `
-      <input type="text" value="${key}" placeholder="Form Key" onchange="updateFormKey(${index}, '${key}', this.value)" />
-      <input type="text" value="${forms[key]}" placeholder="Form Value" onchange="updateFormValue(${index}, '${key}', this.value)" />
-      <button onclick="removeForm(${index}, '${key}')">Remove</button>
-    `;
-        div.appendChild(formPairDiv);
+    Object.entries(forms).forEach(([key, value]) => {
+        const formDiv = document.createElement("div");
+        formDiv.innerHTML = `
+            <input type="text" value="${key}" onchange="updateFormKey(${index}, '${key}', this.value)" />
+            <input type="text" value="${value}" onchange="updateFormValue(${index}, '${key}', this.value)" />
+            <button onclick="removeForm(${index}, '${key}')">Remove</button>
+        `;
+        div.appendChild(formDiv);
     });
-
-    // Add button for adding new form
     const addFormButton = document.createElement("button");
     addFormButton.textContent = "Add Form";
-    addFormButton.addEventListener("click", function () {
-        addNewForm(index);
-    });
-
+    addFormButton.onclick = () => addNewForm(index);
     div.appendChild(addFormButton);
-
     return div;
 }
 
 function updateWord(index, field, value) {
-    if (field === "forms") {
-        allWords[index][field] = value;
-    } else {
-        allWords[index][field] = value;
-    }
+    allWords[index][field] = value;
 }
 
 function updateFormKey(index, oldKey, newKey) {
     const word = allWords[index];
-    const formValue = word.forms[oldKey];
+    word.forms[newKey] = word.forms[oldKey];
     delete word.forms[oldKey];
-    word.forms[newKey] = formValue;
 }
 
 function updateFormValue(index, key, value) {
@@ -228,47 +137,22 @@ function editBaseWord(index) {
 
 function addNewWord() {
     const newBase = prompt("Enter base word:");
-
-    // Создание селектора для выбора части речи
-    const posSelector = createPosSelector("", 0);  // Здесь создается селектор без выбранной части речи
-    const posDropdown = document.createElement("div");
-    posDropdown.appendChild(posSelector);
-
-    // Появляется модальное окно с полем для ввода base и отображением селектора для части речи
-    const newPos = posSelector.value;  // Получаем выбранное значение части речи сразу
-
-    const newForms = {};  // Пустой объект для форм
-
-    if (newBase && newPos) {
-        const newWord = {
-            base: newBase,
-            part_of_speech: newPos,
-            forms: newForms,
-            is_exception: false  // По умолчанию слово не является исключением
-        };
+    if (newBase) {
+        const newWord = { base: newBase, part_of_speech: "", forms: {}, is_exception: false };
         allWords.push(newWord);
-        filteredWords.push(newWord);  // Добавляем слово в список фильтрации
         populateTable();
     }
 }
 
-
 function deleteWord(index) {
     allWords.splice(index, 1);
-    filteredWords = [...allWords]; // Update filtered words
-    populateTable();  // Re-populate table after removal
+    populateTable();
 }
 
 function filterTable() {
     const baseWordFilter = document.getElementById("baseWordFilter").value.toLowerCase();
     const posFilter = Array.from(document.getElementById("posFilter").selectedOptions).map(option => option.value);
-
-    filteredWords = allWords.filter(word => {
-        const matchesBase = word.base.toLowerCase().includes(baseWordFilter);
-        const matchesPos = posFilter.length === 0 || posFilter.includes(word.part_of_speech);
-        return matchesBase && matchesPos;
-    });
-
+    allWords = allWords.filter(word => word.base.toLowerCase().includes(baseWordFilter) && (posFilter.length === 0 || posFilter.includes(word.part_of_speech)));
     populateTable();
 }
 
@@ -277,42 +161,27 @@ function sendDataToAPI() {
 }
 
 function saveToJSON() {
-    const blob = new Blob([JSON.stringify(filteredWords, null, 2)], {type: "application/json"});
+    const blob = new Blob([JSON.stringify(allWords, null, 2)], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "words.json";
     link.click();
 }
 
-function clearFilters() {
-    document.getElementById("baseWordFilter").value = "";
-
-    const posFilter = document.getElementById("posFilter");
-    for (let option of posFilter.options) {
-        option.selected = false;
-    }
-
-    filteredWords = [...allWords]
-    populateTable();
-}
-
 function loadFromJSON() {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = ".json";
-
     input.addEventListener("change", function () {
         const file = input.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = (e) => {
                 allWords = JSON.parse(e.target.result);
-                filteredWords = [...allWords];  // Initialize filtered words with the full list
                 populateTable();
             };
             reader.readAsText(file);
         }
     });
-
     input.click();
 }
