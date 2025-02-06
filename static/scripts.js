@@ -19,7 +19,8 @@ function readFile(file) {
 
   reader.onload = function (e) {
     const text = e.target.result;
-    extractTextAndSend(text);
+    const fileFormat = file.name.endsWith(".txt") ? "txt" : "rtf"; // Determine format
+    extractTextAndSend(text, fileFormat);
   };
 
   if (file.name.endsWith(".txt")) {
@@ -29,13 +30,14 @@ function readFile(file) {
   }
 }
 
-function extractTextAndSend(text) {
+function extractTextAndSend(text, format) {
   // Send the text to the API after extracting
   document.getElementById("sendDataBtn").disabled = false;
 
-  // Send the extracted text to the API
+  // Prepare request data with format flag
   const requestData = {
     text: text,
+    format: format // Include format (txt/rtf)
   };
 
   fetch("/api/process-text", {
@@ -64,7 +66,7 @@ function populateTable() {
   wordsDTO.forEach((word, index) => {
     const row = document.createElement("tr");
 
-    // Base Word Cell
+    // Word Cell with editable base
     const wordCell = document.createElement("td");
     wordCell.innerHTML = `<span onclick="editBaseWord(${index})">${word.base}</span>`;
 
@@ -159,6 +161,14 @@ function addNewForm(index) {
   const newKey = prompt("Enter new form key:");
   if (newKey) {
     wordsDTO[index].forms[newKey] = "";
+    populateTable();
+  }
+}
+
+function editBaseWord(index) {
+  const newBase = prompt("Edit word base:", wordsDTO[index].base);
+  if (newBase !== null) {
+    wordsDTO[index].base = newBase;
     populateTable();
   }
 }

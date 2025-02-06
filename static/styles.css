@@ -1,68 +1,84 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  margin: 0;
   padding: 20px;
+  background-color: #f4f7fc;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   background-color: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 20px;
+  color: #333;
 }
 
-.file-upload {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-button {
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
-  margin-right: 10px;
-  background-color: #4CAF50;
-  color: white;
+input[type="file"], button {
+  padding: 10px 20px;
+  margin: 10px 5px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
 }
 
 button:disabled {
-  background-color: #ccc;
+  background-color: #aaa;
+  cursor: not-allowed;
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
   margin-top: 20px;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 th, td {
-  padding: 10px;
+  padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ddd;
 }
 
-td input {
+th {
+  background-color: #007BFF;
+  color: white;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+td input, td select {
   width: 100%;
   padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
 }
 
-.file-actions {
-  margin-top: 20px;
-  text-align: center;
+button {
+  background-color: #28a745;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+span {
+  color: #007BFF;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+span:hover {
+  color: #0056b3;
 }

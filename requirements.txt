@@ -1,0 +1,4 @@
+Flask~=3.1.0
+inflect~=7.5.0
+spacy~=3.8.4
+striprtf~=0.0.28
