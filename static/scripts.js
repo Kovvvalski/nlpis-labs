@@ -83,6 +83,11 @@ function populateTable() {
     filteredWords.forEach((word, index) => {
         const row = document.createElement("tr");
 
+        // Если это исключение, добавляем класс для красной подсветки
+        if (word.is_exception) {
+            row.classList.add("exception");
+        }
+
         // Word Cell with editable base
         const wordCell = document.createElement("td");
         wordCell.innerHTML = `<span onclick="editBaseWord(${index})">${word.base}</span>`;
@@ -103,15 +108,36 @@ function populateTable() {
         deleteButton.onclick = () => deleteWord(index);
         deleteCell.appendChild(deleteButton);
 
+        // Add Remove Exception button if the word is an exception
+        const exceptionCell = document.createElement("td");
+        if (word.is_exception) {
+            const removeExceptionButton = document.createElement("button");
+            removeExceptionButton.textContent = "Remove Exception";
+            removeExceptionButton.onclick = () => removeException(index);
+            exceptionCell.appendChild(removeExceptionButton);
+        }
+
         row.appendChild(wordCell);
         row.appendChild(posCell);
         row.appendChild(formsCell);
         row.appendChild(deleteCell);
+        row.appendChild(exceptionCell);
 
         tableBody.appendChild(row);
     });
 }
 
+function removeException(index) {
+    allWords[index].is_exception = false;  // Убираем исключение
+    filteredWords = [...allWords]; // Обновляем список фильтрации
+    populateTable(); // Пересоздаем таблицу
+}
+
+function markAsException(index) {
+    allWords[index].is_exception = true;
+    filteredWords = [...allWords];  // Обновляем список фильтрации
+    populateTable();  // Пересоздаем таблицу
+}
 
 function createPosSelector(selectedValue, index) {
     const posOptions = ["Noun", "Verb", "Adjective", "Pronoun", "Preposition", "Conjunction", "Interjection", "Determiner", "Particle"];
@@ -217,7 +243,8 @@ function addNewWord() {
         const newWord = {
             base: newBase,
             part_of_speech: newPos,
-            forms: newForms
+            forms: newForms,
+            is_exception: false  // По умолчанию слово не является исключением
         };
         allWords.push(newWord);
         filteredWords.push(newWord);  // Добавляем слово в список фильтрации
