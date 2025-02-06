@@ -2,8 +2,10 @@ document.getElementById("fileInput").addEventListener("change", handleFileSelect
 document.getElementById("sendDataBtn").addEventListener("click", sendDataToAPI);
 document.getElementById("saveFileBtn").addEventListener("click", saveToJSON);
 document.getElementById("loadFileBtn").addEventListener("click", loadFromJSON);
+document.getElementById("addWordBtn").addEventListener("click", addNewWord);
 
 let wordsDTO = [];
+let filteredWords = [];  // Store the filtered words for display
 
 function handleFileSelect(event) {
   const file = event.target.files[0];
@@ -50,6 +52,7 @@ function extractTextAndSend(text, format) {
   .then(response => response.json())
   .then(data => {
     wordsDTO = data;
+    filteredWords = [...wordsDTO];  // Initialize filtered words with the full list
     populateTable();
     document.getElementById("saveFileBtn").disabled = false;
     document.getElementById("loadFileBtn").disabled = false;
@@ -63,7 +66,7 @@ function populateTable() {
   const tableBody = document.querySelector("#wordTable tbody");
   tableBody.innerHTML = ""; // Clear existing rows
 
-  wordsDTO.forEach((word, index) => {
+  filteredWords.forEach((word, index) => {
     const row = document.createElement("tr");
 
     // Word Cell with editable base
@@ -173,12 +176,42 @@ function editBaseWord(index) {
   }
 }
 
+function addNewWord() {
+  const newBase = prompt("Enter base word:");
+  const newPos = prompt("Enter part of speech:");
+  const newForms = {};  // Empty forms object
+
+  if (newBase && newPos) {
+    const newWord = {
+      base: newBase,
+      part_of_speech: newPos,
+      forms: newForms
+    };
+    wordsDTO.push(newWord);
+    filteredWords.push(newWord);  // Add to the filtered list as well
+    populateTable();
+  }
+}
+
+function filterTable() {
+  const baseWordFilter = document.getElementById("baseWordFilter").value.toLowerCase();
+  const posFilter = Array.from(document.getElementById("posFilter").selectedOptions).map(option => option.value);
+
+  filteredWords = wordsDTO.filter(word => {
+    const matchesBase = word.base.toLowerCase().includes(baseWordFilter);
+    const matchesPos = posFilter.length === 0 || posFilter.includes(word.part_of_speech);
+    return matchesBase && matchesPos;
+  });
+
+  populateTable();
+}
+
 function sendDataToAPI() {
   alert("Data sent to API successfully!");
 }
 
 function saveToJSON() {
-  const blob = new Blob([JSON.stringify(wordsDTO, null, 2)], { type: "application/json" });
+  const blob = new Blob([JSON.stringify(filteredWords, null, 2)], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = "words.json";
@@ -196,6 +229,7 @@ function loadFromJSON() {
       const reader = new FileReader();
       reader.onload = function (e) {
         wordsDTO = JSON.parse(e.target.result);
+        filteredWords = [...wordsDTO];  // Initialize filtered words with the full list
         populateTable();
       };
       reader.readAsText(file);

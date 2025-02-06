@@ -15,6 +15,25 @@
     <button id="saveFileBtn" disabled>Save as JSON</button>
     <button id="loadFileBtn" disabled>Load JSON</button>
 
+    <!-- Filter Section -->
+    <div id="filterSection">
+        <input type="text" id="baseWordFilter" placeholder="Filter by Base Word" oninput="filterTable()">
+        <select id="posFilter" multiple onchange="filterTable()">
+            <option value="Noun">Noun</option>
+            <option value="Verb">Verb</option>
+            <option value="Adjective">Adjective</option>
+            <option value="Pronoun">Pronoun</option>
+            <option value="Preposition">Preposition</option>
+            <option value="Conjunction">Conjunction</option>
+            <option value="Interjection">Interjection</option>
+            <option value="Determiner">Determiner</option>
+            <option value="Particle">Particle</option>
+        </select>
+    </div>
+
+    <!-- Add New Word -->
+    <button id="addWordBtn">Add New Word</button>
+
     <table id="wordTable" class="word-table">
         <thead>
         <tr>
