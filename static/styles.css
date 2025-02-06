@@ -82,3 +82,9 @@ span {
 span:hover {
   color: #0056b3;
 }
+
+/* Подсветка строки красным цветом */
+.exception {
+    background-color: red;
+    color: white;
+}

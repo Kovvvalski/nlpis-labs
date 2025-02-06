@@ -4,6 +4,15 @@ from entity.noun import Noun
 from entity.pronoun import Pronoun
 from entity.verb import Verb
 
+BASES_EXCEPTIONS = [
+    'be', 'begin', 'eat', 'go', 'have', 'know', 'run', 'see', 'take', 'speak', 'write',
+    'come', 'get', 'give', 'meet', 'bring',
+    'child', 'man', 'woman', 'tooth', 'foot', 'mouse', 'goose', 'cactus', 'fungus', 'alumnus',
+    'bacterium', 'criterion', 'phenomenon', 'ox', 'datum',
+    'good', 'bad', 'far', 'little', 'much', 'many', 'old', 'young', 'big', 'small', 'early',
+    'late', 'happy', 'easy', 'difficult'
+]
+
 
 class WordGeneratorService:
     def generate_word_forms(self, words):
@@ -37,6 +46,6 @@ class WordGeneratorService:
                 forms["participle"] = word.generate_word_form({"verb_form": "participle"})
 
             # Создаем DTO
-            word_forms.append(WordDto(base=word.base, part_of_speech=word.__class__.__name__, forms=forms))
+            word_forms.append(WordDto(base=word.base, part_of_speech=word.__class__.__name__, forms=forms, is_exception=word.base in BASES_EXCEPTIONS))
 
         return word_forms
