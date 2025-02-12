@@ -1,5 +1,4 @@
 document.getElementById("fileInput").addEventListener("change", handleFileSelect);
-document.getElementById("sendDataBtn").addEventListener("click", sendDataToAPI);
 document.getElementById("saveFileBtn").addEventListener("click", saveToJSON);
 document.getElementById("loadFileBtn").addEventListener("click", loadFromJSON);
 document.getElementById("addWordBtn").addEventListener("click", addNewWord);
@@ -156,10 +155,6 @@ function filterTable() {
     const posFilter = Array.from(document.getElementById("posFilter").selectedOptions).map(option => option.value);
     shownWords = initialWords.filter(word => word.base.toLowerCase().includes(baseWordFilter) && (posFilter.length === 0 || posFilter.includes(word.part_of_speech)));
     populateTable();
-}
-
-function sendDataToAPI() {
-    alert("Data sent to API successfully!");
 }
 
 function saveToJSON() {
