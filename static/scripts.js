@@ -4,7 +4,8 @@ document.getElementById("saveFileBtn").addEventListener("click", saveToJSON);
 document.getElementById("loadFileBtn").addEventListener("click", loadFromJSON);
 document.getElementById("addWordBtn").addEventListener("click", addNewWord);
 
-let allWords = [];
+let shownWords = [];
+let initialWords = [];
 
 function handleFileSelect(event) {
     const file = event.target.files[0];
@@ -32,7 +33,8 @@ function extractTextAndSend(text, format) {
     })
     .then(response => response.json())
     .then(data => {
-        allWords = data;
+        shownWords = data;
+        initialWords = structuredClone(shownWords);
         populateTable();
         document.getElementById("saveFileBtn").disabled = false;
         document.getElementById("loadFileBtn").disabled = false;
@@ -43,8 +45,8 @@ function extractTextAndSend(text, format) {
 function populateTable() {
     const tableBody = document.querySelector("#wordTable tbody");
     tableBody.innerHTML = "";
-    allWords.sort((a, b) => a.base.localeCompare(b.base));
-    allWords.forEach((word, index) => {
+    shownWords.sort((a, b) => a.base.localeCompare(b.base));
+    shownWords.forEach((word, index) => {
         const row = document.createElement("tr");
         if (word.is_exception) row.classList.add("exception");
 
@@ -63,12 +65,12 @@ function populateTable() {
 }
 
 function removeException(index) {
-    allWords[index].is_exception = false;
+    shownWords[index].is_exception = false;
     populateTable();
 }
 
 function markAsException(index) {
-    allWords[index].is_exception = true;
+    shownWords[index].is_exception = true;
     populateTable();
 }
 
@@ -101,36 +103,36 @@ function createFormsEditor(forms, index) {
 }
 
 function updateWord(index, field, value) {
-    allWords[index][field] = value;
+    shownWords[index][field] = value;
 }
 
 function updateFormKey(index, oldKey, newKey) {
-    const word = allWords[index];
+    const word = shownWords[index];
     word.forms[newKey] = word.forms[oldKey];
     delete word.forms[oldKey];
 }
 
 function updateFormValue(index, key, value) {
-    allWords[index].forms[key] = value;
+    shownWords[index].forms[key] = value;
 }
 
 function removeForm(index, key) {
-    delete allWords[index].forms[key];
+    delete shownWords[index].forms[key];
     populateTable();
 }
 
 function addNewForm(index) {
     const newKey = prompt("Enter new form key:");
     if (newKey) {
-        allWords[index].forms[newKey] = "";
+        shownWords[index].forms[newKey] = "";
         populateTable();
     }
 }
 
 function editBaseWord(index) {
-    const newBase = prompt("Edit word base:", allWords[index].base);
+    const newBase = prompt("Edit word base:", shownWords[index].base);
     if (newBase !== null) {
-        allWords[index].base = newBase;
+        shownWords[index].base = newBase;
         populateTable();
     }
 }
@@ -139,20 +141,20 @@ function addNewWord() {
     const newBase = prompt("Enter base word:");
     if (newBase) {
         const newWord = { base: newBase, part_of_speech: "", forms: {}, is_exception: false };
-        allWords.push(newWord);
+        shownWords.push(newWord);
         populateTable();
     }
 }
 
 function deleteWord(index) {
-    allWords.splice(index, 1);
+    shownWords.splice(index, 1);
     populateTable();
 }
 
 function filterTable() {
     const baseWordFilter = document.getElementById("baseWordFilter").value.toLowerCase();
     const posFilter = Array.from(document.getElementById("posFilter").selectedOptions).map(option => option.value);
-    allWords = allWords.filter(word => word.base.toLowerCase().includes(baseWordFilter) && (posFilter.length === 0 || posFilter.includes(word.part_of_speech)));
+    shownWords = initialWords.filter(word => word.base.toLowerCase().includes(baseWordFilter) && (posFilter.length === 0 || posFilter.includes(word.part_of_speech)));
     populateTable();
 }
 
@@ -161,7 +163,7 @@ function sendDataToAPI() {
 }
 
 function saveToJSON() {
-    const blob = new Blob([JSON.stringify(allWords, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(shownWords, null, 2)], { type: "application/json" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "words.json";
@@ -177,11 +179,16 @@ function loadFromJSON() {
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                allWords = JSON.parse(e.target.result);
+                shownWords = JSON.parse(e.target.result);
                 populateTable();
             };
             reader.readAsText(file);
         }
     });
     input.click();
+}
+
+function reset(){
+    shownWords = structuredClone(initialWords);
+    populateTable();
 }
