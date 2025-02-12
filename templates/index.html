@@ -10,14 +10,38 @@
 <div class="container">
     <h1>Word Table Editor</h1>
 
+    <button id="helpBtn" onclick="helpMe()">Помогите</button>
+    <div id="helpModal" class="help-modal">
+        <div class="help-modal-content">
+            <span id="closeHelpBtn" class="close-btn">&times;</span>
+            <h2>How to Use the Word Table Editor</h2>
+            <p><strong>1. Upload a file:</strong> Use the "Choose File" button to upload a .txt or .rtf file that
+                contains a list of words.</p>
+            <p><strong>2. Filter Words:</strong> Use the filter section to filter words by their base word and part of
+                speech.</p>
+            <p><strong>3. Add, Edit, and Delete Words:</strong> Add new words by clicking "Add New Word". You can edit a
+                word’s base or part of speech and delete a word.</p>
+            <p><strong>4. Save and Load Data:</strong> Save your word list as a JSON file or load a previously saved
+                JSON file.</p>
+        </div>
+    </div>
+
+
     <input type="file" id="fileInput" accept=".txt,.rtf"/>
-    <button id="saveFileBtn" disabled>Save as JSON</button>
-    <button id="loadFileBtn" disabled>Load JSON</button>
+    <button id="saveFileBtn">Save as JSON</button>
+    <button id="loadFileBtn">Load JSON</button>
+    <button id="executeFilterBtn" onclick="filterTable()">Execute Filter</button>
+
+    <div id="pagination">
+        <button id="prevPageBtn" onclick="changePage(-1)">Previous</button>
+        <span id="pageNumber">Page 1</span>
+        <button id="nextPageBtn" onclick="changePage(1)">Next</button>
+    </div>
 
     <!-- Filter Section -->
     <div id="filterSection">
-        <input type="text" id="baseWordFilter" placeholder="Filter by Base Word" oninput="filterTable()">
-        <select id="posFilter" multiple onchange="filterTable()">
+        <input type="text" id="baseWordFilter" placeholder="Filter by Base Word">
+        <select id="posFilter" multiple>
             <option value="Noun">Noun</option>
             <option value="Verb">Verb</option>
             <option value="Adjective">Adjective</option>

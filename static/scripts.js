@@ -5,6 +5,9 @@ document.getElementById("addWordBtn").addEventListener("click", addNewWord);
 
 let shownWords = [];
 let initialWords = [];
+let currentPage = 0;
+const ROWS_PER_PAGE = 5;
+
 
 function handleFileSelect(event) {
     const file = event.target.files[0];
@@ -24,43 +27,56 @@ function readFile(file) {
 }
 
 function extractTextAndSend(text, format) {
-    document.getElementById("sendDataBtn").disabled = false;
     fetch("/api/process-text", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, format })
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text, format})
     })
-    .then(response => response.json())
-    .then(data => {
-        shownWords = data;
-        initialWords = structuredClone(shownWords);
-        populateTable();
-        document.getElementById("saveFileBtn").disabled = false;
-        document.getElementById("loadFileBtn").disabled = false;
-    })
-    .catch(error => console.error("Error:", error));
+        .then(response => response.json())
+        .then(data => {
+            shownWords = data;
+            shownWords.sort((a, b) => a.base.localeCompare(b.base));
+            initialWords = structuredClone(shownWords);
+            populateTable();
+        })
+        .catch(error => console.error("Error:", error));
 }
 
 function populateTable() {
     const tableBody = document.querySelector("#wordTable tbody");
     tableBody.innerHTML = "";
-    shownWords.sort((a, b) => a.base.localeCompare(b.base));
-    shownWords.forEach((word, index) => {
+    let startIndex = ROWS_PER_PAGE * currentPage;
+    let endIndex = Math.min(startIndex + ROWS_PER_PAGE, shownWords.length);
+    for (let index = startIndex; index < endIndex; index++) {
+        const word = shownWords[index];
         const row = document.createElement("tr");
+
         if (word.is_exception) row.classList.add("exception");
 
         row.innerHTML = `
-            <td><span onclick="editBaseWord(${index})">${word.base}</span></td>
-            <td></td>
-            <td></td>
-            <td><button onclick="deleteWord(${index})">Delete</button></td>
-            <td>${word.is_exception ? `<button onclick="removeException(${index})">Remove Exception</button>` : ""}</td>
-        `;
+        <td><span onclick="editBaseWord(${index})">${word.base}</span></td>
+        <td></td>
+        <td></td>
+        <td><button onclick="deleteWord(${index})">Delete</button></td>
+        <td>${word.is_exception ? `<button onclick="removeException(${index})">Remove Exception</button>` : ""}</td>
+    `;
 
         row.children[1].appendChild(createPosSelector(word.part_of_speech, index));
         row.children[2].appendChild(createFormsEditor(word.forms, index));
         tableBody.appendChild(row);
-    });
+    }
+
+    const pageNumberElement = document.getElementById("pageNumber");
+    pageNumberElement.textContent = `Page ${currentPage + 1}`;
+
+    document.getElementById("prevPageBtn").disabled = currentPage === 0;
+    document.getElementById("nextPageBtn").disabled = currentPage >= Math.floor(shownWords.length / ROWS_PER_PAGE);
+}
+
+function changePage(direction) {
+    currentPage += direction;
+    currentPage = Math.max(0, Math.min(currentPage, Math.floor(shownWords.length / ROWS_PER_PAGE)));
+    populateTable();
 }
 
 function removeException(index) {
@@ -139,8 +155,8 @@ function editBaseWord(index) {
 function addNewWord() {
     const newBase = prompt("Enter base word:");
     if (newBase) {
-        const newWord = { base: newBase, part_of_speech: "", forms: {}, is_exception: false };
-        shownWords.push(newWord);
+        const newWord = {base: newBase, part_of_speech: "Noun", forms: {}, is_exception: false};
+        shownWords.unshift(newWord);
         populateTable();
     }
 }
@@ -153,12 +169,14 @@ function deleteWord(index) {
 function filterTable() {
     const baseWordFilter = document.getElementById("baseWordFilter").value.toLowerCase();
     const posFilter = Array.from(document.getElementById("posFilter").selectedOptions).map(option => option.value);
-    shownWords = initialWords.filter(word => word.base.toLowerCase().includes(baseWordFilter) && (posFilter.length === 0 || posFilter.includes(word.part_of_speech)));
+    shownWords = shownWords.filter(word => word.base.toLowerCase().includes(baseWordFilter) && (posFilter.length === 0 || posFilter.includes(word.part_of_speech)));
+    shownWords.sort((a, b) => a.base.localeCompare(b.base));
+    currentPage = 0;
     populateTable();
 }
 
 function saveToJSON() {
-    const blob = new Blob([JSON.stringify(shownWords, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(shownWords, null, 2)], {type: "application/json"});
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "words.json";
@@ -183,7 +201,25 @@ function loadFromJSON() {
     input.click();
 }
 
-function reset(){
+function reset() {
     shownWords = structuredClone(initialWords);
+    currentPage = 0;
     populateTable();
 }
+
+function helpMe() {
+    const helpModal = document.getElementById("helpModal");
+    helpModal.style.display = "flex";
+}
+
+document.getElementById("closeHelpBtn").addEventListener("click", function () {
+    const helpModal = document.getElementById("helpModal");
+    helpModal.style.display = "none";
+});
+
+window.addEventListener("click", function (event) {
+    const helpModal = document.getElementById("helpModal");
+    if (event.target === helpModal) {
+        helpModal.style.display = "none";
+    }
+});
