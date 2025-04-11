@@ -2,51 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Syntax Tree Visualizer</title>
+    <title>Semantic Text Analyzer</title>
     <link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
-<h1>Syntax Tree Visualizer</h1>
+    <h1>Semantic Text Analyzer</h1>
 
-<form id="file-upload-form">
-    <label for="file-input">Choose a text file:</label>
-    <input type="file" id="file-input" accept=".txt"/>
-    <button type="submit">Parse Sentences from File</button>
-</form>
+    <input type="file" id="fileInput" accept=".txt">
+    <div style="text-align:center;">
+        <button onclick="analyzeText()">Analyze</button>
+        <button onclick="downloadJSON()">Download Result</button>
+        <button onclick="openHelp()">Help</button>
+    </div>
 
-<button id="help-btn">Help</button>
+    <div id="results"></div>
 
-<h2>Grammar Rules</h2>
-<label for="grammar-box"></label><textarea id="grammar-box" class="grammar-box" rows="15" spellcheck="false"></textarea>
-<button id="download-btn">Download Grammar</button>
-
-<div id="help-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-header">How to Use</div>
-        <div class="modal-body">
-            <p>Follow these simple steps to use the Syntax Tree Visualizer:</p>
-            <ul>
-                <li><strong>Step 1:</strong> Upload a text file by clicking on the "Choose a text file" button.</li>
-                <li><strong>Step 2:</strong> After selecting the file, click "Parse Sentences from File" to send it to
-                    the server.
-                </li>
-                <li><strong>Step 3:</strong> The system will parse each sentence from the text file and generate syntax
-                    trees for each sentence.
-                </li>
-                <li><strong>Step 4:</strong> Each sentence will be displayed with its corresponding syntax tree(s). If
-                    the sentence can't be parsed, an error message will be shown.
-                </li>
-            </ul>
-            <p>Happy visualizing!</p>
+    <div id="helpModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeHelp()">&times;</span>
+            <h2>How to Use</h2>
+            <p>1. Upload a <strong>.txt</strong> file containing English text.</p>
+            <p>2. Click the <strong>Analyze</strong> button. Each sentence and word will be processed and displayed.</p>
+            <p>3. You can manually edit semantic predicates in the text areas.</p>
+            <p>4. Click <strong>Download Result</strong> to save your analysis as a <strong>JSON</strong> file.</p>
         </div>
     </div>
-</div>
 
-<div id="results" class="tree-container"></div>
-
-<script src="/static/js/mian.js">
-</script>
+    <script src="/static/js/main.js"></script>
 </body>
 </html>
