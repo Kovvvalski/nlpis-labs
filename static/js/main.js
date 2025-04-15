@@ -1,4 +1,6 @@
 let processedResult = [];
+let currentPage = 1;
+const itemsPerPage = 5;
 
 function analyzeText() {
     const fileInput = document.getElementById("fileInput");
@@ -32,7 +34,12 @@ function renderResults(data) {
     const container = document.getElementById("results");
     container.innerHTML = "";
 
-    data.forEach((sentenceObj, sIndex) => {
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const pageItems = data.slice(start, end);
+
+    pageItems.forEach((sentenceObj, sIndexOffset) => {
+        const sIndex = start + sIndexOffset;
         const sentenceDiv = document.createElement("div");
         sentenceDiv.className = "sentence";
 
@@ -51,7 +58,6 @@ function renderResults(data) {
             const textarea = document.createElement("textarea");
             textarea.value = wordObj.predicates.join("\n");
 
-            // Установка высоты в зависимости от количества строк
             adjustTextareaHeight(textarea);
 
             textarea.addEventListener("input", () => {
@@ -65,7 +71,42 @@ function renderResults(data) {
 
         container.appendChild(sentenceDiv);
     });
+    renderPaginationControls();
 }
+
+function renderPaginationControls() {
+    const container = document.getElementById("results");
+    const nav = document.createElement("div");
+    nav.className = "pagination";
+
+    const totalPages = Math.ceil(processedResult.length / itemsPerPage);
+
+    const prev = document.createElement("button");
+    prev.textContent = "← Previous";
+    prev.disabled = currentPage === 1;
+    prev.onclick = () => {
+        currentPage--;
+        renderResults(processedResult);
+    };
+
+    const next = document.createElement("button");
+    next.textContent = "Next →";
+    next.disabled = currentPage === totalPages;
+    next.onclick = () => {
+        currentPage++;
+        renderResults(processedResult);
+    };
+
+    const pageInfo = document.createElement("span");
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    pageInfo.style.margin = "0 10px";
+
+    nav.appendChild(prev);
+    nav.appendChild(pageInfo);
+    nav.appendChild(next);
+    container.appendChild(nav);
+}
+
 
 function adjustTextareaHeight(textarea) {
     textarea.style.height = "auto";
