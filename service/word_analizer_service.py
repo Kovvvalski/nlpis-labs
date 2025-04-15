@@ -1,4 +1,5 @@
 import spacy
+from spacy.cli.download import download
 from entity.noun import Noun
 from entity.verb import Verb
 from entity.adjective import Adjective
@@ -6,8 +7,11 @@ from entity.pronoun import Pronoun
 from entity.simple_words import *
 
 # Загружаем модель языка для spaCy (например, для английского языка)
-nlp = spacy.load("en_core_web_sm")  # Для других языков используйте соответствующие модели
-
+try:
+    nlp = spacy.load("en_core_web_sm")  # Для других языков используйте соответствующие модели
+except IOError:
+    download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 class WordAnalyzerService:
     def __init__(self):
@@ -44,16 +48,22 @@ class WordAnalyzerService:
         else:
             return None  # Если не удалось определить часть речи
 
-    def analyze_text(self, text):
-        """
-        Анализирует текст, токенизирует его и создает объекты классов для слов.
-        """
-        doc = self.nlp(text)  # spaCy выполняет токенизацию и анализ текста
+    def analyze_text(self, text, update_repeat_count=False):
+        """Modified to support repeat counts"""
+        doc = self.nlp(text)
         unique_words = set()
+        word_counts = {}
 
+        # First pass: count occurrences
+        for token in doc:
+            key = token.text.lower()
+            word_counts[key] = word_counts.get(key, 0) + 1
+
+        # Second pass: create words with counts
         for token in doc:
             word_obj = self.analyze_word(token.text)
             if word_obj:
-                unique_words.add(word_obj)  # Добавляем объект в множество
+                word_obj.repeat_count = word_counts[token.text.lower()]
+                unique_words.add(word_obj)
 
         return unique_words

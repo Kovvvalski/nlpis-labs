@@ -9,6 +9,9 @@
 <body>
 <div class="container">
     <h1>Word Table Editor</h1>
+    <div class="stats-container">
+        <span id="totalWordsCount">Total words: 0</span>
+    </div>
 
     <button id="helpBtn" onclick="helpMe()">Помогите</button>
     <div id="helpModal" class="help-modal">
@@ -26,8 +29,26 @@
         </div>
     </div>
 
+    <div id="contextSearchModal" class="help-modal">
+        <div class="help-modal-content">
+            <span id="closeContextSearchBtn" class="close-btn">&times;</span>
+            <h2>Search Context</h2>
+            <div class="search-group">
+                <input type="text" id="contextSearchInput" placeholder="Enter phrase to search">
+                <button onclick="searchContext()">Search</button>
+            </div>
+            <div id="contextResults" class="results-container"></div>
+        </div>
+    </div>
 
-    <input type="file" id="fileInput" accept=".txt,.rtf"/>
+    <div class="file-input-group">
+        <input type="file" id="fileInput" accept=".txt,.rtf"/>
+        <label class="context-checkbox">
+            <input type="checkbox" id="useContextCheckbox"> Use Context
+        </label>
+        <button id="reloadContextBtn" class="hidden">Reload Context</button>
+        <button id="contextSearchBtn" class="hidden" onclick="showContextSearch()">Search in Context</button>
+    </div>
     <button id="saveFileBtn">Save as JSON</button>
     <button id="loadFileBtn">Load JSON</button>
     <button id="executeFilterBtn" onclick="filterTable()">Execute Filter</button>
@@ -60,15 +81,15 @@
 
     <table id="wordTable" class="word-table">
         <thead>
-        <tr>
-            <th>Word</th>
-            <th>Part of Speech</th>
-            <th>Forms</th>
-        </tr>
+            <tr>
+                <th>Word</th>
+                <th>Part of Speech</th>
+                <th>Forms</th>
+                <th class="repeat-count-header">Repeat Count</th> <!-- New column -->
+                <th>Actions</th>
+            </tr>
         </thead>
-        <tbody>
-
-        </tbody>
+        <tbody></tbody>
     </table>
 </div>
 

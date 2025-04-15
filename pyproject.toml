@@ -1,0 +1,17 @@
+[project]
+name = "nlpis-labs"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask~=3.1.0",
+    "inflect~=7.5.0",
+    "spacy~=3.8.4",
+    "striprtf~=0.0.28",
+]
+
+[dependency-groups]
+dev = [
+    "pip>=25.0.1",
+]

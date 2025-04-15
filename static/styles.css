@@ -160,3 +160,85 @@ span:hover {
 .help-modal button:hover {
     background-color: #45a049;
 }
+
+.file-input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.context-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.stats-container {
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+/* Add to styles.css */
+.repeat-count-header {
+    display: none;
+}
+
+.show-repeat-count .repeat-count-header {
+    display: table-cell;
+}
+
+.hidden {
+    display: none;
+}
+
+.use-context-visible {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.context-word {
+    background-color: #f0f8ff;  /* Light blue background */
+    border-left: 3px solid #1e90ff;  /* Dodger blue left border */
+}
+
+/* Context search styles */
+.search-group {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.use-context-visible, 
+#contextSearchBtn.use-context-visible {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+#contextSearchInput {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.results-container {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 15px;
+}
+
+.context-result {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.context-result:hover {
+    background-color: #e9ecef;
+}
+
+.source-file {
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-top: 5px;
+}
