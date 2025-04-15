@@ -99,7 +99,13 @@ function updateWordCount() {
 
 function handleFileSelect(event) {
     const file = event.target.files[0];
-    if (file && (file.name.endsWith(".txt") || file.name.endsWith(".rtf"))) {
+    if (file && (file.name.endsWith(".txt") 
+        || file.name.endsWith(".rtf")
+        || file.name.endsWith(".doc")
+        || file.name.endsWith(".docx")
+        || file.name.endsWith(".docx")
+        || file.name.endsWith(".pdf")
+    )) {
         readFile(file);
     } else {
         alert("Please select a valid .txt or .rtf file.");
