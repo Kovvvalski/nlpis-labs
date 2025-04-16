@@ -57,6 +57,7 @@ cover/
 
 uv.lock
 .vscode/
+.idea/
 
 # Django stuff:
 *.log
