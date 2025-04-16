@@ -51,7 +51,7 @@ def find_context():
         return jsonify({"error": "Missing 'phrase' parameter"}), 400
     
     try:
-        results = corpus_manager.find_context(data['phrase'])
+        results = corpus_manager.find_context(data['phrase'], data['scope'])
         return jsonify(results)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

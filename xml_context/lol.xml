@@ -1,10 +1,320 @@
 <?xml version='1.0' encoding='utf-8'?>
-<corpus><sentences><sentence id="1"><word id="1">Transportation</word><word id="2">is</word><word id="3">the</word><word id="4">backbone</word><word id="5">of</word><word id="6">modern</word><word id="7">civilization</word><word id="8">,</word><word id="9">enabling</word><word id="10">the</word><word id="11">seamless</word><word id="12">flow</word><word id="13">of</word><word id="14">people</word><word id="15">and</word><word id="16">goods</word><word id="17">across</word><word id="18">cities</word><word id="19">,</word><word id="20">countries</word><word id="21">,</word><word id="22">and</word><word id="23">continents</word><word id="24">.</word></sentence><sentence id="2"><word id="1">It</word><word id="2">bridges</word><word id="3">distances</word><word id="4">,</word><word id="5">fosters</word><word id="6">economic</word><word id="7">growth</word><word id="8">,</word><word id="9">and</word><word id="10">brings</word><word id="11">cultures</word><word id="12">closer</word><word id="13">together</word><word id="14">.</word></sentence><sentence id="3"><word id="1">Whether</word><word id="2">it</word><word id="3">’s</word><word id="4">a</word><word id="5">daily</word><word id="6">commute</word><word id="7">to</word><word id="8">work</word><word id="9">,</word><word id="10">a</word><word id="11">cross</word><word id="12">-</word><word id="13">country</word><word id="14">road</word><word id="15">trip</word><word id="16">,</word><word id="17">or</word><word id="18">the</word><word id="19">delivery</word><word id="20">of</word><word id="21">goods</word><word id="22">from</word><word id="23">factory</word><word id="24">to</word><word id="25">store</word><word id="26">,</word><word id="27">transportation</word><word id="28">keeps</word><word id="29">societies</word><word id="30">moving</word><word id="31">forward</word><word id="32">.</word><word id="33"> 
-
-</word></sentence><sentence id="4"><word id="1">Cities</word><word id="2">thrive</word><word id="3">on</word><word id="4">efficient</word><word id="5">public</word><word id="6">transit</word><word id="7">systems</word><word id="8">like</word><word id="9">subways</word><word id="10">,</word><word id="11">buses</word><word id="12">,</word><word id="13">and</word><word id="14">light</word><word id="15">rail</word><word id="16">,</word><word id="17">which</word><word id="18">help</word><word id="19">reduce</word><word id="20">reliance</word><word id="21">on</word><word id="22">private</word><word id="23">cars</word><word id="24">and</word><word id="25">ease</word><word id="26">urban</word><word id="27">congestion</word><word id="28">.</word></sentence><sentence id="5"><word id="1">Meanwhile</word><word id="2">,</word><word id="3">intercity</word><word id="4">travel</word><word id="5">depends</word><word id="6">on</word><word id="7">trains</word><word id="8">and</word><word id="9">airplanes</word><word id="10">,</word><word id="11">offering</word><word id="12">speed</word><word id="13">and</word><word id="14">convenience</word><word id="15">for</word><word id="16">longer</word><word id="17">journeys</word><word id="18">.</word></sentence><sentence id="6"><word id="1">Maritime</word><word id="2">transport</word><word id="3">remains</word><word id="4">indispensable</word><word id="5">for</word><word id="6">global</word><word id="7">trade</word><word id="8">,</word><word id="9">with</word><word id="10">massive</word><word id="11">cargo</word><word id="12">ships</word><word id="13">carrying</word><word id="14">goods</word><word id="15">across</word><word id="16">oceans</word><word id="17">,</word><word id="18">linking</word><word id="19">producers</word><word id="20">and</word><word id="21">consumers</word><word id="22">worldwide</word><word id="23">.</word><word id="24"> 
-
-</word></sentence><sentence id="7"><word id="1">Innovation</word><word id="2">continues</word><word id="3">to</word><word id="4">reshape</word><word id="5">how</word><word id="6">we</word><word id="7">travel</word><word id="8">.</word></sentence><sentence id="8"><word id="1">Electric</word><word id="2">vehicles</word><word id="3">are</word><word id="4">reducing</word><word id="5">emissions</word><word id="6">,</word><word id="7">while</word><word id="8">ride</word><word id="9">-</word><word id="10">sharing</word><word id="11">apps</word><word id="12">and</word><word id="13">bike</word><word id="14">-</word><word id="15">sharing</word><word id="16">programs</word><word id="17">provide</word><word id="18">flexible</word><word id="19">alternatives</word><word id="20">to</word><word id="21">traditional</word><word id="22">transport</word><word id="23">.</word></sentence><sentence id="9"><word id="1">Emerging</word><word id="2">technologies</word><word id="3">like</word><word id="4">self</word><word id="5">-</word><word id="6">driving</word><word id="7">cars</word><word id="8">and</word><word id="9">high</word><word id="10">-</word><word id="11">speed</word><word id="12">rail</word><word id="13">projects</word><word id="14">hint</word><word id="15">at</word><word id="16">a</word><word id="17">future</word><word id="18">where</word><word id="19">travel</word><word id="20">is</word><word id="21">faster</word><word id="22">,</word><word id="23">safer</word><word id="24">,</word><word id="25">and</word><word id="26">more</word><word id="27">sustainable</word><word id="28">.</word><word id="29"> 
-
-</word></sentence><sentence id="10"><word id="1">Yet</word><word id="2">challenges</word><word id="3">persist</word><word id="4">—</word><word id="5">aging</word><word id="6">infrastructure</word><word id="7">,</word><word id="8">traffic</word><word id="9">congestion</word><word id="10">,</word><word id="11">and</word><word id="12">the</word><word id="13">environmental</word><word id="14">impact</word><word id="15">of</word><word id="16">fossil</word><word id="17">fuels</word><word id="18">demand</word><word id="19">urgent</word><word id="20">attention</word><word id="21">.</word></sentence><sentence id="11"><word id="1">Governments</word><word id="2">and</word><word id="3">businesses</word><word id="4">must</word><word id="5">invest</word><word id="6">in</word><word id="7">smarter</word><word id="8">,</word><word id="9">greener</word><word id="10">solutions</word><word id="11">to</word><word id="12">ensure</word><word id="13">transportation</word><word id="14">remains</word><word id="15">accessible</word><word id="16">and</word><word id="17">efficient</word><word id="18">for</word><word id="19">all</word><word id="20">.</word><word id="21"> 
-
-</word></sentence><sentence id="12"><word id="1">At</word><word id="2">its</word><word id="3">core</word><word id="4">,</word><word id="5">transportation</word><word id="6">is</word><word id="7">more</word><word id="8">than</word><word id="9">just</word><word id="10">movement</word><word id="11">—</word><word id="12">it</word><word id="13">’s</word><word id="14">a</word><word id="15">vital</word><word id="16">force</word><word id="17">that</word><word id="18">connects</word><word id="19">lives</word><word id="20">,</word><word id="21">drives</word><word id="22">economies</word><word id="23">,</word><word id="24">and</word><word id="25">shapes</word><word id="26">the</word><word id="27">way</word><word id="28">we</word><word id="29">experience</word><word id="30">the</word><word id="31">world</word><word id="32">.</word></sentence><sentence id="13"><word id="1">Sex</word><word id="2">.</word></sentence></sentences></corpus>
+<corpus>
+    <sentences>
+        <sentence id="1">
+            <word id="1">Transportation</word>
+            <word id="2">is</word>
+            <word id="3">the</word>
+            <word id="4">backbone</word>
+            <word id="5">of</word>
+            <word id="6">modern</word>
+            <word id="7">civilization</word>
+            <word id="8">,</word>
+            <word id="9">enabling</word>
+            <word id="10">the</word>
+            <word id="11">seamless</word>
+            <word id="12">flow</word>
+            <word id="13">of</word>
+            <word id="14">people</word>
+            <word id="15">and</word>
+            <word id="16">goods</word>
+            <word id="17">across</word>
+            <word id="18">cities</word>
+            <word id="19">,</word>
+            <word id="20">countries</word>
+            <word id="21">,</word>
+            <word id="22">and</word>
+            <word id="23">continents</word>
+            <word id="24">.</word>
+        </sentence>
+        <sentence id="2">
+            <word id="1">It</word>
+            <word id="2">bridges</word>
+            <word id="3">distances</word>
+            <word id="4">,</word>
+            <word id="5">fosters</word>
+            <word id="6">economic</word>
+            <word id="7">growth</word>
+            <word id="8">,</word>
+            <word id="9">and</word>
+            <word id="10">brings</word>
+            <word id="11">cultures</word>
+            <word id="12">closer</word>
+            <word id="13">together</word>
+            <word id="14">.</word>
+        </sentence>
+        <sentence id="3">
+            <word id="1">Whether</word>
+            <word id="2">it</word>
+            <word id="3">’s</word>
+            <word id="4">a</word>
+            <word id="5">daily</word>
+            <word id="6">commute</word>
+            <word id="7">to</word>
+            <word id="8">work</word>
+            <word id="9">,</word>
+            <word id="10">a</word>
+            <word id="11">cross</word>
+            <word id="12">-</word>
+            <word id="13">country</word>
+            <word id="14">road</word>
+            <word id="15">trip</word>
+            <word id="16">,</word>
+            <word id="17">or</word>
+            <word id="18">the</word>
+            <word id="19">delivery</word>
+            <word id="20">of</word>
+            <word id="21">goods</word>
+            <word id="22">from</word>
+            <word id="23">factory</word>
+            <word id="24">to</word>
+            <word id="25">store</word>
+            <word id="26">,</word>
+            <word id="27">transportation</word>
+            <word id="28">keeps</word>
+            <word id="29">societies</word>
+            <word id="30">moving</word>
+            <word id="31">forward</word>
+            <word id="32">.</word>
+            <word id="33">
+
+
+            </word>
+        </sentence>
+        <sentence id="4">
+            <word id="1">Cities</word>
+            <word id="2">thrive</word>
+            <word id="3">on</word>
+            <word id="4">efficient</word>
+            <word id="5">public</word>
+            <word id="6">transit</word>
+            <word id="7">systems</word>
+            <word id="8">like</word>
+            <word id="9">subways</word>
+            <word id="10">,</word>
+            <word id="11">buses</word>
+            <word id="12">,</word>
+            <word id="13">and</word>
+            <word id="14">light</word>
+            <word id="15">rail</word>
+            <word id="16">,</word>
+            <word id="17">which</word>
+            <word id="18">help</word>
+            <word id="19">reduce</word>
+            <word id="20">reliance</word>
+            <word id="21">on</word>
+            <word id="22">private</word>
+            <word id="23">cars</word>
+            <word id="24">and</word>
+            <word id="25">ease</word>
+            <word id="26">urban</word>
+            <word id="27">congestion</word>
+            <word id="28">.</word>
+        </sentence>
+        <sentence id="5">
+            <word id="1">Meanwhile</word>
+            <word id="2">,</word>
+            <word id="3">intercity</word>
+            <word id="4">travel</word>
+            <word id="5">depends</word>
+            <word id="6">on</word>
+            <word id="7">trains</word>
+            <word id="8">and</word>
+            <word id="9">airplanes</word>
+            <word id="10">,</word>
+            <word id="11">offering</word>
+            <word id="12">speed</word>
+            <word id="13">and</word>
+            <word id="14">convenience</word>
+            <word id="15">for</word>
+            <word id="16">longer</word>
+            <word id="17">journeys</word>
+            <word id="18">.</word>
+        </sentence>
+        <sentence id="6">
+            <word id="1">Maritime</word>
+            <word id="2">transport</word>
+            <word id="3">remains</word>
+            <word id="4">indispensable</word>
+            <word id="5">for</word>
+            <word id="6">global</word>
+            <word id="7">trade</word>
+            <word id="8">,</word>
+            <word id="9">with</word>
+            <word id="10">massive</word>
+            <word id="11">cargo</word>
+            <word id="12">ships</word>
+            <word id="13">carrying</word>
+            <word id="14">goods</word>
+            <word id="15">across</word>
+            <word id="16">oceans</word>
+            <word id="17">,</word>
+            <word id="18">linking</word>
+            <word id="19">producers</word>
+            <word id="20">and</word>
+            <word id="21">consumers</word>
+            <word id="22">worldwide</word>
+            <word id="23">.</word>
+            <word id="24">
+
+
+            </word>
+        </sentence>
+        <sentence id="7">
+            <word id="1">Innovation</word>
+            <word id="2">continues</word>
+            <word id="3">to</word>
+            <word id="4">reshape</word>
+            <word id="5">how</word>
+            <word id="6">we</word>
+            <word id="7">travel</word>
+            <word id="8">.</word>
+        </sentence>
+        <sentence id="8">
+            <word id="1">Electric</word>
+            <word id="2">vehicles</word>
+            <word id="3">are</word>
+            <word id="4">reducing</word>
+            <word id="5">emissions</word>
+            <word id="6">,</word>
+            <word id="7">while</word>
+            <word id="8">ride</word>
+            <word id="9">-</word>
+            <word id="10">sharing</word>
+            <word id="11">apps</word>
+            <word id="12">and</word>
+            <word id="13">bike</word>
+            <word id="14">-</word>
+            <word id="15">sharing</word>
+            <word id="16">programs</word>
+            <word id="17">provide</word>
+            <word id="18">flexible</word>
+            <word id="19">alternatives</word>
+            <word id="20">to</word>
+            <word id="21">traditional</word>
+            <word id="22">transport</word>
+            <word id="23">.</word>
+        </sentence>
+        <sentence id="9">
+            <word id="1">Emerging</word>
+            <word id="2">technologies</word>
+            <word id="3">like</word>
+            <word id="4">self</word>
+            <word id="5">-</word>
+            <word id="6">driving</word>
+            <word id="7">cars</word>
+            <word id="8">and</word>
+            <word id="9">high</word>
+            <word id="10">-</word>
+            <word id="11">speed</word>
+            <word id="12">rail</word>
+            <word id="13">projects</word>
+            <word id="14">hint</word>
+            <word id="15">at</word>
+            <word id="16">a</word>
+            <word id="17">future</word>
+            <word id="18">where</word>
+            <word id="19">travel</word>
+            <word id="20">is</word>
+            <word id="21">faster</word>
+            <word id="22">,</word>
+            <word id="23">safer</word>
+            <word id="24">,</word>
+            <word id="25">and</word>
+            <word id="26">more</word>
+            <word id="27">sustainable</word>
+            <word id="28">.</word>
+            <word id="29">
+
+
+            </word>
+        </sentence>
+        <sentence id="10">
+            <word id="1">Yet</word>
+            <word id="2">challenges</word>
+            <word id="3">persist</word>
+            <word id="4">—</word>
+            <word id="5">aging</word>
+            <word id="6">infrastructure</word>
+            <word id="7">,</word>
+            <word id="8">traffic</word>
+            <word id="9">congestion</word>
+            <word id="10">,</word>
+            <word id="11">and</word>
+            <word id="12">the</word>
+            <word id="13">environmental</word>
+            <word id="14">impact</word>
+            <word id="15">of</word>
+            <word id="16">fossil</word>
+            <word id="17">fuels</word>
+            <word id="18">demand</word>
+            <word id="19">urgent</word>
+            <word id="20">attention</word>
+            <word id="21">.</word>
+        </sentence>
+        <sentence id="11">
+            <word id="1">Governments</word>
+            <word id="2">and</word>
+            <word id="3">businesses</word>
+            <word id="4">must</word>
+            <word id="5">invest</word>
+            <word id="6">in</word>
+            <word id="7">smarter</word>
+            <word id="8">,</word>
+            <word id="9">greener</word>
+            <word id="10">solutions</word>
+            <word id="11">to</word>
+            <word id="12">ensure</word>
+            <word id="13">transportation</word>
+            <word id="14">remains</word>
+            <word id="15">accessible</word>
+            <word id="16">and</word>
+            <word id="17">efficient</word>
+            <word id="18">for</word>
+            <word id="19">all</word>
+            <word id="20">.</word>
+            <word id="21">
+
+
+            </word>
+        </sentence>
+        <sentence id="12">
+            <word id="1">At</word>
+            <word id="2">its</word>
+            <word id="3">core</word>
+            <word id="4">,</word>
+            <word id="5">transportation</word>
+            <word id="6">is</word>
+            <word id="7">more</word>
+            <word id="8">than</word>
+            <word id="9">just</word>
+            <word id="10">movement</word>
+            <word id="11">—</word>
+            <word id="12">it</word>
+            <word id="13">’s</word>
+            <word id="14">a</word>
+            <word id="15">vital</word>
+            <word id="16">force</word>
+            <word id="17">that</word>
+            <word id="18">connects</word>
+            <word id="19">lives</word>
+            <word id="20">,</word>
+            <word id="21">drives</word>
+            <word id="22">economies</word>
+            <word id="23">,</word>
+            <word id="24">and</word>
+            <word id="25">shapes</word>
+            <word id="26">the</word>
+            <word id="27">way</word>
+            <word id="28">we</word>
+            <word id="29">experience</word>
+            <word id="30">the</word>
+            <word id="31">world</word>
+            <word id="32">.</word>
+        </sentence>
+        <sentence id="13">
+            <word id="1">Sex</word>
+            <word id="2">.</word>
+        </sentence>
+    </sentences>
+</corpus>

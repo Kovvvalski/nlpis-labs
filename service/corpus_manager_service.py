@@ -43,42 +43,67 @@ class CorpusManagerService:
             xml_declaration=True,
         )
 
-    def find_context(self, phrase: str) -> list:
-        """Поиск контекста по фразе в сохраненных XML-файлах
+    def find_context(self, phrase: str, n: int = 1) -> list:
+        """Поиск контекста по фразе с указанным количеством слов вокруг.
 
         Args:
-            phrase (str): Искомая фраза
+            phrase (str): Искомая фраза.
+            n (int): Количество слов слева и справа от фразы.
 
         Returns:
-            list: Список словарей с контекстами и источниками
+            list: Список словарей с контекстами и источниками.
         """
         results = []
         context_files = self._get_context_files()
+        phrase_words = phrase.lower().split()
+        phrase_len = len(phrase_words)
+
+        if phrase_len == 0:
+            return results
 
         for file_path in context_files:
-            
             tree = ET.parse(file_path)
             root = tree.getroot()
 
-            for sentence_elem in root.findall(".//sentence"):
-                words = sentence_elem.findall("word")
-                sentence_text = ""
+            # Собираем все слова файла в порядке их появления
+            all_words = []
+            for sentence in root.findall(".//sentence"):
+                for word in sentence.findall("word"):
+                    word_text = word.text.strip()
+                    if word_text:  # Игнорируем пустые слова
+                        all_words.append(word)
 
-                for i, word in enumerate(words):
-                    token = word.text
+            # Преобразуем слова в нижний регистр для поиска
+            words_lower = [word.text.lower().strip() for word in all_words]
 
-                    if i == 0 or self._is_punctuation(token):
-                        sentence_text += token
-                    else:
-                        sentence_text += " " + token
+            # Поиск всех вхождений фразы
+            for i in range(len(words_lower) - phrase_len + 1):
+                current_phrase = words_lower[i:i + phrase_len]
+                if current_phrase == phrase_words:
+                    # Проверка наличия N слов слева и справа
+                    start = i - n
+                    end = i + phrase_len + n
 
-                if phrase.lower() in sentence_text.lower():
-                    results.append(
-                        {
-                            "found_context": sentence_text.strip(),
-                            "source_file": os.path.relpath(file_path),
-                        }
-                    )
+                    if start < 0 or end > len(all_words):
+                        continue  # Недостаточно слов
+
+                    # Извлекаем контекстные слова
+                    context_words = all_words[start:end]
+
+                    # Формируем текст контекста
+                    context_text = ""
+                    for idx, word in enumerate(context_words):
+                        token = word.text.strip()
+                        if idx == 0 or self._is_punctuation(token):
+                            context_text += token
+                        else:
+                            context_text += " " + token
+
+                    # Добавляем результат
+                    results.append({
+                        "found_context": context_text.strip(),
+                        "source_file": os.path.relpath(file_path),
+                    })
 
         return results
     

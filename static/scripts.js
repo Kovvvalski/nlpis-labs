@@ -20,6 +20,10 @@ function showContextSearch() {
     document.getElementById("contextResults").innerHTML = "";
 }
 
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 let shownWords = [];
 let initialWords = [];
 let currentPage = 0;
@@ -27,13 +31,21 @@ const ROWS_PER_PAGE = 5;
 
 async function searchContext() {
     const phrase = document.getElementById("contextSearchInput").value.trim();
-    if (!phrase) return;
+    const scope = parseInt(document.getElementById("contextScopeInput").value) || 0;
+    
+    if (!phrase) {
+        alert("Please enter a search phrase");
+        return;
+    }
 
     try {
         const response = await fetch("/api/find-context", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ phrase })
+            body: JSON.stringify({ 
+                phrase: phrase,
+                scope: scope 
+            })
         });
         
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -47,11 +59,19 @@ async function searchContext() {
             return;
         }
 
+        const escapedPhrase = escapeRegExp(phrase);
+        const highlightRegex = new RegExp(`\\b(${escapedPhrase})\\b`, 'gi');
+
         results.forEach(result => {
             const div = document.createElement("div");
             div.className = "context-result";
+            // Добавляем подсветку фразы
+            const highlightedText = result.found_context.replace(
+                highlightRegex,
+                '<span class="highlight">$1</span>'
+            );
             div.innerHTML = `
-                <div class="context-text">${result.found_context}</div>
+                <div class="context-text">${highlightedText}</div>
                 <div class="source-file">Source: ${result.source_file.split('/').pop()}</div>
             `;
             resultsContainer.appendChild(div);

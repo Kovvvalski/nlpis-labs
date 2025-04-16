@@ -212,6 +212,14 @@ span:hover {
     margin-left: 10px;
 }
 
+#contextScopeInput {
+    width: 120px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-left: 5px;
+}
+
 #contextSearchInput {
     flex: 1;
     padding: 8px;
@@ -241,4 +249,10 @@ span:hover {
     font-size: 0.9em;
     color: #6c757d;
     margin-top: 5px;
+}
+
+.highlight {
+    background-color: #90EE90; /* Светло-зеленый */
+    padding: 2px 4px;
+    border-radius: 3px;
 }
