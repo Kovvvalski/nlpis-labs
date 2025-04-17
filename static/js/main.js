@@ -2,6 +2,7 @@ const modal = document.getElementById("help-modal");
 const helpBtn = document.getElementById("help-btn");
 const closeModal = document.querySelector(".close");
 const grammarBox = document.getElementById('grammar-box');
+let text = ''
 
 helpBtn.onclick = function () {
     modal.style.display = "block";
@@ -60,7 +61,7 @@ document.getElementById('file-upload-form').addEventListener('submit', async (e)
 
     const reader = new FileReader();
     reader.onload = async function (event) {
-        const text = event.target.result;
+        text = event.target.result;
 
         const res = await fetch('/parse', {
             method: 'POST',
@@ -68,44 +69,66 @@ document.getElementById('file-upload-form').addEventListener('submit', async (e)
             body: JSON.stringify({text})
         });
 
-        const data = await res.json();
-
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = '';
-
-        updateGrammarBox(data.grammar);
-        const sentenceData = data.sentences;
-
-        sentenceData.forEach(item => {
-            const sentenceBlock = document.createElement('div');
-            sentenceBlock.classList.add('sentence-block');
-
-            const sentence = document.createElement('h3');
-            sentence.textContent = item.sentence;
-
-            const treeList = document.createElement('div');
-            treeList.classList.add('tree-list');
-
-            if (item.error) {
-                const errorMessage = document.createElement('p');
-                errorMessage.classList.add('error-message');
-                errorMessage.textContent = item.error;
-                treeList.appendChild(errorMessage);
-            } else {
-                item.trees.forEach(tree => {
-                    if (tree) {
-                        const img = document.createElement('img');
-                        img.src = '/' + tree;
-                        treeList.appendChild(img);
-                    }
-                });
-            }
-
-            sentenceBlock.appendChild(sentence);
-            sentenceBlock.appendChild(treeList);
-            resultsDiv.appendChild(sentenceBlock);
-        });
+        await renderData(res);
     };
 
     reader.readAsText(file);
 });
+
+document.getElementById('reanalyze-btn').addEventListener('click', async () => {
+    if (!text.trim() && !grammarBox.value.trim()) {
+        alert("Both grammar box and text are empty.");
+        return;
+    }
+    const requestBody = {
+        originalText: text,
+        grammarBoxText: grammarBox.value
+    };
+
+    const res = await fetch('/reanalyze', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(requestBody)
+    });
+    await renderData(res);
+});
+
+async function renderData(serverResult) {
+    const data = await serverResult.json();
+
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
+
+    updateGrammarBox(data.grammar);
+    const sentenceData = data.sentences;
+
+    sentenceData.forEach(item => {
+        const sentenceBlock = document.createElement('div');
+        sentenceBlock.classList.add('sentence-block');
+
+        const sentence = document.createElement('h3');
+        sentence.textContent = item.sentence;
+
+        const treeList = document.createElement('div');
+        treeList.classList.add('tree-list');
+
+        if (item.error) {
+            const errorMessage = document.createElement('p');
+            errorMessage.classList.add('error-message');
+            errorMessage.textContent = item.error;
+            treeList.appendChild(errorMessage);
+        } else {
+            item.trees.forEach(tree => {
+                if (tree) {
+                    const img = document.createElement('img');
+                    img.src = '/' + tree;
+                    treeList.appendChild(img);
+                }
+            });
+        }
+
+        sentenceBlock.appendChild(sentence);
+        sentenceBlock.appendChild(treeList);
+        resultsDiv.appendChild(sentenceBlock);
+    });
+}

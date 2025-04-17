@@ -85,3 +85,28 @@ def build_grammar(tokens_list) -> CFG:
 
     # Building grammar
     return CFG(S, productions)
+
+from nltk.grammar import Nonterminal, Production, CFG
+
+def build_productions_from_string(grammar_str):
+    productions = []
+    start_symbol = None
+    for line in grammar_str.strip().splitlines():
+        if not line.strip():
+            continue
+        lhs_rhs = line.split("->")
+        if len(lhs_rhs) != 2:
+            continue
+        lhs = lhs_rhs[0].strip()
+        rhs = lhs_rhs[1].strip()
+        lhs_symbol = Nonterminal(lhs)
+        if start_symbol is None:
+            start_symbol = lhs_symbol
+        rhs_symbols = []
+        for symbol in rhs.split():
+            if symbol.startswith("'") and symbol.endswith("'"):
+                rhs_symbols.append(symbol.strip("'"))
+            else:
+                rhs_symbols.append(Nonterminal(symbol))
+        productions.append(Production(lhs_symbol, rhs_symbols))
+    return CFG(start_symbol, productions)
