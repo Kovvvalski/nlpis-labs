@@ -1,4 +1,4 @@
-let processedResult = [];
+let processedXML = "";
 let currentPage = 1;
 const itemsPerPage = 5;
 
@@ -11,82 +11,92 @@ function analyzeText() {
 
     const file = fileInput.files[0];
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         const text = e.target.result;
         fetch('/analyze', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ text })
+            body: JSON.stringify({text})
         })
-        .then(res => res.json())
-        .then(data => {
-            processedResult = data;
-            renderResults(data);
-        })
-        .catch(err => console.error(err));
+            .then(res => res.text())
+            .then(xmlText => {
+                processedXML = xmlText;
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "application/xml");
+                renderResults(xmlDoc);
+            })
+            .catch(err => console.error(err));
     };
     reader.readAsText(file);
 }
 
-function renderResults(data) {
+function renderResults(xmlDoc) {
     const container = document.getElementById("results");
     container.innerHTML = "";
 
+    const sentences = Array.from(xmlDoc.getElementsByTagName("sentence"));
+    const totalPages = Math.ceil(sentences.length / itemsPerPage);
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    const pageItems = data.slice(start, end);
+    const pageItems = sentences.slice(start, end);
 
-    pageItems.forEach((sentenceObj, sIndexOffset) => {
-        const sIndex = start + sIndexOffset;
+    pageItems.forEach(sentenceElem => {
         const sentenceDiv = document.createElement("div");
         sentenceDiv.className = "sentence";
 
-        const sentenceHeader = document.createElement("h3");
-        sentenceHeader.textContent = sentenceObj.sentence;
-        sentenceDiv.appendChild(sentenceHeader);
+        const header = document.createElement("h3");
+        header.textContent = sentenceElem.getAttribute("text");
+        sentenceDiv.appendChild(header);
 
-        sentenceObj.words.forEach((wordObj, wIndex) => {
+        const words = sentenceElem.getElementsByTagName("word");
+        Array.from(words).forEach(wordElem => {
             const wordDiv = document.createElement("div");
             wordDiv.className = "word";
 
             const label = document.createElement("strong");
-            label.textContent = `Word: ${wordObj.word}`;
+            label.textContent = `Word: ${wordElem.getAttribute("text")}`;
             wordDiv.appendChild(label);
+            ["synonyms", "definitions", "hypernyms"].forEach(type => {
+                const groupDiv = document.createElement("div");
+                groupDiv.className = "group";
 
-            const textarea = document.createElement("textarea");
-            textarea.value = wordObj.predicates.join("\n");
+                const sectionLabel = document.createElement("div");
+                sectionLabel.innerHTML = `<em>${type.charAt(0).toUpperCase() + type.slice(1)}:</em>`;
 
-            adjustTextareaHeight(textarea);
-
-            textarea.addEventListener("input", () => {
+                const textarea = document.createElement("textarea");
+                const items = wordElem.getElementsByTagName(type)[0]?.getElementsByTagName("item");
+                textarea.value = Array.from(items || []).map(i => i.textContent).join("\n");
                 adjustTextareaHeight(textarea);
-                processedResult[sIndex].words[wIndex].predicates = textarea.value.split("\n");
+
+                groupDiv.appendChild(sectionLabel);
+                groupDiv.appendChild(textarea);
+                wordDiv.appendChild(groupDiv);
             });
 
-            wordDiv.appendChild(textarea);
             sentenceDiv.appendChild(wordDiv);
         });
 
         container.appendChild(sentenceDiv);
     });
-    renderPaginationControls();
+
+    renderPaginationControls(sentences.length);
 }
 
-function renderPaginationControls() {
+function renderPaginationControls(totalItems) {
     const container = document.getElementById("results");
     const nav = document.createElement("div");
     nav.className = "pagination";
 
-    const totalPages = Math.ceil(processedResult.length / itemsPerPage);
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
     const prev = document.createElement("button");
     prev.textContent = "← Previous";
     prev.disabled = currentPage === 1;
     prev.onclick = () => {
         currentPage--;
-        renderResults(processedResult);
+        analyzeText(); // re-fetch or re-render
     };
 
     const next = document.createElement("button");
@@ -94,7 +104,7 @@ function renderPaginationControls() {
     next.disabled = currentPage === totalPages;
     next.onclick = () => {
         currentPage++;
-        renderResults(processedResult);
+        analyzeText();
     };
 
     const pageInfo = document.createElement("span");
@@ -107,7 +117,6 @@ function renderPaginationControls() {
     container.appendChild(nav);
 }
 
-
 function adjustTextareaHeight(textarea) {
     textarea.style.height = "auto";
     const lineHeight = 20;
@@ -115,18 +124,55 @@ function adjustTextareaHeight(textarea) {
     textarea.style.height = (lines * lineHeight + 10) + "px";
 }
 
+function download() {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(processedXML, "application/xml");
 
-function downloadJSON() {
-    const blob = new Blob([JSON.stringify(processedResult, null, 2)], { type: "application/json" });
+    const sentenceElems = Array.from(xmlDoc.getElementsByTagName("sentence"));
+    let wordTextareas = document.querySelectorAll("#results .word");
+
+    wordTextareas.forEach((wordDiv, wIndex) => {
+        const sentenceIndex = Math.floor(wIndex / itemsPerPage) + (currentPage - 1);
+        const sentenceElem = sentenceElems[sentenceIndex];
+        const wordElem = sentenceElem.getElementsByTagName("word")[wIndex % itemsPerPage];
+
+        if (!wordElem) return;
+
+        const groupDivs = wordDiv.querySelectorAll(".group");
+
+        ["synonyms", "definitions", "hypernyms"].forEach((type, i) => {
+            const textarea = groupDivs[i].querySelector("textarea");
+            const newValues = textarea.value.split("\n").map(v => v.trim()).filter(Boolean);
+
+            // Clear existing items
+            const container = wordElem.getElementsByTagName(type)[0];
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
+
+            // Add updated items
+            newValues.forEach(val => {
+                const item = xmlDoc.createElement("item");
+                item.textContent = val;
+                container.appendChild(item);
+            });
+        });
+    });
+
+    const serializer = new XMLSerializer();
+    const updatedXML = serializer.serializeToString(xmlDoc);
+
+    const blob = new Blob([updatedXML], {type: "application/xml"});
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
-    link.download = "semantic_analysis_result.json";
+    link.download = "semantic_analysis_result.xml";
     link.href = url;
     link.click();
 
     URL.revokeObjectURL(url);
 }
+
 
 function openHelp() {
     document.getElementById("helpModal").style.display = "block";

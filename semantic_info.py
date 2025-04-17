@@ -4,6 +4,7 @@ class SemanticInfo:
         self.synonyms = set()
         self.definitions = []
         self.hypernyms = set()
+        self.sentence = ""
 
     def add_synonym(self, synonym):
         self.synonyms.add(synonym.lower())
