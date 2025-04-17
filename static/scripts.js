@@ -213,6 +213,7 @@ function populateTable() {
         <td></td>
         <td></td>
         ${useContext ? `<td class="repeat-count">${word.repeat_count || 1}</td>` : ''}
+        ${useContext ? `<td class="context">${word.context || 1}</td>` : ''}
         <td><button onclick="deleteWord(${i})">Delete</button></td>
         ${word.is_exception ? `<td><button onclick="removeException(${i})">Remove Exception</button></td>` : '<td></td>'}
     `;

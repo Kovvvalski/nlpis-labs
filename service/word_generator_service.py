@@ -104,7 +104,8 @@ class WordGeneratorService:
                     part_of_speech=word.__class__.__name__,
                     forms=forms,
                     is_exception=word.base in BASES_EXCEPTIONS,
-                    repeat_count=word.repeat_count
+                    repeat_count=word.repeat_count,
+                    context=word.context
                 )
             )
         return word_forms

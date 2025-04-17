@@ -20,7 +20,7 @@ class CorpusManagerService:
     def create_context(self, text: str, file_name: str):
         os.makedirs("xml_context", exist_ok=True)
         doc = self.nlp(text)
-        corpus = ET.Element("corpus")
+        corpus = ET.Element("text")
 
         # Создаем структуру разметки
         sentences_element = ET.SubElement(corpus, "sentences")
@@ -78,17 +78,21 @@ class CorpusManagerService:
 
             # Поиск всех вхождений фразы
             for i in range(len(words_lower) - phrase_len + 1):
-                current_phrase = words_lower[i:i + phrase_len]
+                current_phrase = words_lower[i : i + phrase_len]
                 if current_phrase == phrase_words:
                     # Проверка наличия N слов слева и справа
                     start = i - n
                     end = i + phrase_len + n
 
-                    if start < 0 or end > len(all_words):
+                    if start < 0 and end > len(all_words):
                         continue  # Недостаточно слов
 
                     # Извлекаем контекстные слова
-                    context_words = all_words[start:end]
+                    context_words = all_words[
+                        (start := 0 if start < 0 else start) : (
+                            end := len(all_words) if end > len(all_words) else end
+                        )
+                    ]
 
                     # Формируем текст контекста
                     context_text = ""
@@ -100,50 +104,66 @@ class CorpusManagerService:
                             context_text += " " + token
 
                     # Добавляем результат
-                    results.append({
-                        "found_context": context_text.strip(),
-                        "source_file": os.path.relpath(file_path),
-                    })
+                    results.append(
+                        {
+                            "found_context": context_text.strip(),
+                            "source_file": os.path.relpath(file_path),
+                        }
+                    )
 
         return results
-    
+
     def process_context_text(self):
         """Process all context files and return analyzed words"""
         self.word_registry = {}
         context_files = self._get_context_files()
-        
+
         for file_path in context_files:
             tree = ET.parse(file_path)
             root = tree.getroot()
-            
+            file_name = os.path.relpath(file_path)
+
             for sentence in root.findall(".//sentence"):
                 for word in sentence.findall("word"):
                     word_text = word.text.lower()
-                    self.word_registry[word_text] = self.word_registry.get(word_text, 0) + 1
-        
+
+                    if word_text in self.word_registry.keys():
+                        repeats = self.word_registry[word_text][0] + 1
+                        context = self.word_registry[word_text][1]
+                        if file_name not in context and f'<br/>{file_name}' not in context:
+                            context.append(f"<br/>{file_name}")
+                    else:
+                        repeats = 1
+                        context = [file_name]
+                    self.word_registry[word_text] = (repeats, context)
+
         return self._create_word_objects()
 
     def _get_context_files(self):
         context_dir = "xml_context"
-        return [
-            os.path.join(context_dir, f) 
-            for f in os.listdir(context_dir) 
-            if f.endswith(".xml")
-        ] if os.path.exists(context_dir) else []
+        return (
+            [
+                os.path.join(context_dir, f)
+                for f in os.listdir(context_dir)
+                if f.endswith(".xml")
+            ]
+            if os.path.exists(context_dir)
+            else []
+        )
 
     def _create_word_objects(self):
         analyzer = WordAnalyzerService()
         generator = WordGeneratorService()
         words = []
-        
-        for word_base, count in self.word_registry.items():
+
+        for word_base, info in self.word_registry.items():
             analyzed = analyzer.analyze_word(word_base)
             if analyzed:
-                analyzed.repeat_count = count
-                analyzed.fromContext = True  # Add context marker
+                analyzed.repeat_count = info[0]
+                analyzed.context = info[1]
                 # Generate proper DTOs
                 words.extend(generator.generate_word_forms([analyzed]))
-        
+
         return words
 
     @staticmethod
